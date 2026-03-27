@@ -342,13 +342,16 @@ Output: Updated storage levels
 4. Similar argument applies to L2 → L3 migration (lines 17-20).
 5. Therefore, no node content is lost during compaction. ∎
 
-**Theorem 2 (Retrieval Guarantee):** Any node can be retrieved in O(1) time regardless of storage level.
+**Theorem 2 (Retrieval Guarantee):** Any node can be retrieved with constant-time index lookup plus file I/O time, regardless of storage level.
 
 **Proof:**
 1. All node summaries remain in the L1 index, enabling search across all levels.
 2. For any node n, its index entry contains (file_path, byte_offset).
-3. File I/O with known offset is O(1) for file systems supporting random access.
-4. Therefore, any node can be loaded in O(1) time. ∎
+3. The index lookup is O(1) via dictionary access.
+4. File I/O with known offset is O(1) for random-access file systems (SSD/NVMe).
+5. Total retrieval time = O(1) index lookup + O(1) file I/O = O(1) amortized. ∎
+
+**Note:** While theoretically O(1), practical retrieval includes disk latency (typically 0.1-1ms for SSD). Our empirical measurements show L2/L3 retrieval at 0.15-0.18ms (Table 2), which is negligible for agent workloads.
 
 ---
 
