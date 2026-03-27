@@ -42,6 +42,7 @@ test_memory/
 test_context_debug/
 agent_memory_data/
 *_memory/
+!agent_memory/
 
 # Test artifacts
 .pytest_cache/
